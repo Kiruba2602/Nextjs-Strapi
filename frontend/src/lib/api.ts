@@ -79,3 +79,38 @@ export const createPost = async (postData: UserBlogPostData) => {
     throw new Error("Failed to create post");
   }
 };
+
+// Update a blog post
+export const updatePost = async (id: string | number, updatedData: Record<string, any>) => {
+  try {
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blogs/${id}`,
+      { data: updatedData },
+      {
+        headers: {
+          Authorization: `none`, // Authorization header
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error('Error updating post:', error);
+    throw new Error('Failed to update post');
+  }
+};
+
+// Delete a blog post
+export const deletePost = async (id: string, token: string) => {
+  try {
+    await axios.delete(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/blogs/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Authorization header
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    throw new Error('Failed to delete post');
+  }
+};
+
